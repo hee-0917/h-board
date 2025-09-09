@@ -46,7 +46,7 @@ export default function AddEmployeePage() {
             const filteredDepartments = data.filter(dept => dept.id === employee.department_id)
             setDepartments(filteredDepartments)
             // 기본값으로 본인 부서 설정
-            setFormData(prev => ({ ...prev, department_id: employee.department_id.toString() }))
+            setFormData(prev => ({ ...prev, department_id: employee.department_id?.toString() || '' }))
           } else {
             setDepartments(data)
           }
