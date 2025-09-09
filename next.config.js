@@ -11,6 +11,12 @@ const nextConfig = {
     // 빌드 시 TypeScript 오류를 무시
     ignoreBuildErrors: true,
   },
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals.push('next/dist/compiled/source-map')
+    }
+    return config
+  },
   images: {
     unoptimized: true
   },
