@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* 폰트 로딩 최적화 */
+@font-face {
+  font-family: 'Geist';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
