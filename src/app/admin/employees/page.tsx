@@ -25,8 +25,6 @@ export default function EmployeeManagement() {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedDepartment, setSelectedDepartment] = useState('')
   const [selectedRole, setSelectedRole] = useState('')
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null)
 
   // Mock 데이터 초기화
   useEffect(() => {

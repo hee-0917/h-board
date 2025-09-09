@@ -11,7 +11,7 @@ interface PostsState {
   error: string | null
   fetchPosts: () => Promise<void>
   addPost: (post: Omit<Post, 'id' | 'created_at' | 'updated_at' | 'view_count'>) => Promise<boolean>
-  updatePost: (post: any) => void
+  updatePost: (post: Post) => void
   incrementViewCount: (postId: number) => Promise<void>
   initializePosts: () => Promise<void>
 }

@@ -30,7 +30,7 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const { employee, isSuperAdmin, isDepartmentAdmin } = useAuthStore()
+  const { employee } = useAuthStore()
   const { posts, initializePosts } = usePostsStore()
   const { confirmations } = useConfirmationsStore()
   const [stats, setStats] = useState<DashboardStats | null>(null)

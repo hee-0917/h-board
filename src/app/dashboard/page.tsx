@@ -3,11 +3,9 @@
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/auth'
 import { useNotificationsStore } from '@/store/notifications'
-import { createClient } from '@/lib/supabase/client'
 import { Database } from '@/types/database'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import Header from '@/components/Header'
 import Sidebar from '@/components/Sidebar'
 
 type Post = Database['public']['Tables']['posts']['Row'] & {
@@ -26,9 +24,7 @@ export default function DashboardPage() {
     setEmployee, 
     isAdminMode, 
     setAdminMode, 
-    isAdmin, 
-    isSuperAdmin, 
-    isDepartmentAdmin 
+    isAdmin 
   } = useAuthStore()
   const { unreadCount, fetchNotifications } = useNotificationsStore()
   const router = useRouter()
@@ -46,7 +42,7 @@ export default function DashboardPage() {
       try {
         const response = await fetch('/api/departments')
         const departments = await response.json()
-        const currentDepartment = departments.find((dept: any) => dept.id === employee.department_id)
+        const currentDepartment = departments.find((dept: { id: number; name: string }) => dept.id === employee.department_id)
         
         if (currentDepartment) {
           setDepartmentName(currentDepartment.name)

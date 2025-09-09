@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/auth'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 interface Employee {
   id: number
@@ -22,26 +21,10 @@ interface Employee {
 
 export default function EmployeeListPage() {
   const { employee } = useAuthStore()
-  const router = useRouter()
   const [employees, setEmployees] = useState<Employee[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([])
-
-  // 관리자 권한 확인
-  if (!employee || (employee.role !== 'SUPER_ADMIN' && employee.role !== 'DEPARTMENT_ADMIN')) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">🚫</div>
-          <div className="text-lg text-gray-600">접근 권한이 없습니다.</div>
-          <Link href="/dashboard" className="text-blue-600 hover:underline mt-4 inline-block">
-            대시보드로 돌아가기
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   useEffect(() => {
     fetchEmployees()
@@ -132,6 +115,21 @@ export default function EmployeeListPage() {
       console.error('Error updating employee:', error)
       alert('상태 변경 중 오류가 발생했습니다.')
     }
+  }
+
+  // 관리자 권한 확인
+  if (!employee || (employee.role !== 'SUPER_ADMIN' && employee.role !== 'DEPARTMENT_ADMIN')) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-6xl mb-4">🚫</div>
+          <div className="text-lg text-gray-600">접근 권한이 없습니다.</div>
+          <Link href="/dashboard" className="text-blue-600 hover:underline mt-4 inline-block">
+            대시보드로 돌아가기
+          </Link>
+        </div>
+      </div>
+    )
   }
 
   if (isLoading) {

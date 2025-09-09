@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation'
 
 export default function UploadEmployeesPage() {
   const { employee } = useAuthStore()
-  const router = useRouter()
   const [file, setFile] = useState<File | null>(null)
   const [parsedData, setParsedData] = useState<EmployeeData[]>([])
   const [isUploading, setIsUploading] = useState(false)
@@ -68,7 +67,7 @@ export default function UploadEmployeesPage() {
       // 직원 데이터 업로드
       const uploadPromises = parsedData.map(async (emp) => {
         // 부서 ID 찾기
-        const department = departments.find((d: any) => d.name === emp.department_name)
+        const department = departments.find((d: { id: number; name: string }) => d.name === emp.department_name)
         const departmentId = department ? department.id : null
         
         if (!departmentId) {

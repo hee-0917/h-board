@@ -25,12 +25,12 @@ export function parseExcelFile(file: File): Promise<EmployeeData[]> {
         
         // 헤더 제거하고 데이터 파싱
         const headers = jsonData[0] as string[]
-        const rows = jsonData.slice(1) as any[][]
+        const rows = jsonData.slice(1) as string[][]
         
         const employees: EmployeeData[] = rows
           .filter(row => row.length > 0 && row[0]) // 빈 행 제거
           .map(row => {
-            const employee: any = {}
+            const employee: Partial<EmployeeData> = {}
             headers.forEach((header, index) => {
               const value = row[index] || ''
               // 헤더명을 데이터베이스 컬럼명에 맞게 매핑

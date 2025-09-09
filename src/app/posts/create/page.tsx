@@ -51,8 +51,8 @@ export default function CreatePostPage() {
         const employeesResponse = await fetch('/api/employees')
         const employees = await employeesResponse.json()
         
-        const currentDepartment = departments.find((dept: any) => dept.id === employee.department_id)
-        const departmentEmployees = employees.filter((emp: any) => emp.department_id === employee.department_id)
+        const currentDepartment = departments.find((dept: { id: number; name: string }) => dept.id === employee.department_id)
+        const departmentEmployees = employees.filter((emp: { department_id: number }) => emp.department_id === employee.department_id)
         
         if (currentDepartment) {
           setDepartmentName(currentDepartment.name)

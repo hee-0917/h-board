@@ -52,7 +52,7 @@ export default function AllPostsPage() {
       try {
         const response = await fetch('/api/departments')
         const departments = await response.json()
-        const currentDepartment = departments.find((dept: any) => dept.id === employee.department_id)
+        const currentDepartment = departments.find((dept: { id: number; name: string }) => dept.id === employee.department_id)
         
         if (currentDepartment) {
           setDepartmentName(currentDepartment.name)
