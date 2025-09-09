@@ -1,0 +1,186 @@
+nohup: ignoring input
+
+> hospital-board-app@0.1.0 dev
+> WATCHPACK_POLLING=true next dev
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /workspace/package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * /workspace/hospital-board/hospital-board-app/package-lock.json
+
+   ▲ Next.js 15.5.2
+   - Local:        http://localhost:3000
+   - Network:      http://172.17.0.7:3000
+
+ ✓ Starting...
+ ✓ Ready in 1886ms
+ ○ Compiling /dashboard ...
+ ✓ Compiled / in 6.8s (802 modules)
+ GET / 200 in 3189ms
+ GET /dashboard/ 200 in 7395ms
+ GET / 200 in 1453ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1002ms (795 modules)
+ GET /login/ 200 in 1124ms
+ GET /dashboard/ 200 in 53ms
+ ○ Compiling /posts/create ...
+ ✓ Compiled /posts/create in 581ms (804 modules)
+ GET /posts/create/ 200 in 659ms
+ ✓ Compiled /posts/department in 390ms (813 modules)
+ GET /posts/department/ 200 in 464ms
+ ✓ Compiled /posts/[id] in 391ms (820 modules)
+ GET /posts/1757168550109/ 200 in 1012ms
+ ✓ Compiled in 653ms (829 modules)
+ GET /posts/1757168550109/ 200 in 111ms
+ ✓ Compiled in 464ms (829 modules)
+ GET /posts/1757168550109/ 200 in 121ms
+ ✓ Compiled in 401ms (829 modules)
+ GET /posts/1757168550109/ 200 in 106ms
+ GET /posts/department/ 200 in 38ms
+ GET /posts/1757168550109/ 200 in 41ms
+ ✓ Compiled in 347ms (829 modules)
+ GET /posts/1757168550109/ 200 in 101ms
+ ✓ Compiled in 198ms (497 modules)
+ ✓ Compiled in 130ms (332 modules)
+ GET /posts/1757168550109/ 200 in 76ms
+ ✓ Compiled / in 257ms (502 modules)
+ GET / 200 in 497ms
+ GET / 200 in 116ms
+ GET /login/ 200 in 43ms
+ GET /dashboard/ 200 in 41ms
+ GET /posts/create/ 200 in 47ms
+ ✓ Compiled in 735ms (834 modules)
+ GET /posts/department/ 200 in 372ms
+ GET /posts/department/ 200 in 37ms
+ GET /posts/1757168661195/ 200 in 49ms
+ GET /posts/1757168550109/ 200 in 48ms
+ ✓ Compiled in 246ms (332 modules)
+ ✓ Compiled in 99ms (318 modules)
+ ✓ Compiled in 152ms (332 modules)
+ ✓ Compiled in 54ms (318 modules)
+ ✓ Compiled in 135ms (332 modules)
+ ✓ Compiled in 90ms (318 modules)
+ ✓ Compiled in 139ms (332 modules)
+ ✓ Compiled in 65ms (318 modules)
+ ✓ Compiled in 413ms (332 modules)
+ ✓ Compiled in 612ms (497 modules)
+ ✓ Compiled in 204ms (497 modules)
+ ✓ Compiled in 167ms (332 modules)
+ GET /posts/1757168550109/ 200 in 150ms
+ GET /posts/1757168550109/ 200 in 38ms
+ GET /posts/1757168550109/ 200 in 42ms
+ GET /posts/1757168550109/ 200 in 39ms
+ GET /posts/1757168550109/ 200 in 36ms
+ GET /posts/1757168550109/ 200 in 43ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /posts/1757168550109/ 200 in 257ms
+ ✓ Compiled in 244ms (498 modules)
+ ✓ Compiled in 161ms (333 modules)
+ GET /posts/1757168550109/ 200 in 143ms
+ ⚠ Fast Refresh had to perform a full reload. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+ GET /posts/1757168550109/ 200 in 231ms
+ ✓ Compiled in 264ms (498 modules)
+ ✓ Compiled in 154ms (333 modules)
+ GET /posts/1757168550109/ 200 in 166ms
+ ✓ Compiled in 246ms (498 modules)
+ ✓ Compiled in 153ms (333 modules)
+ GET /posts/1757168550109/ 200 in 86ms
+ ✓ Compiled in 215ms (498 modules)
+ ✓ Compiled in 139ms (333 modules)
+ GET /posts/1757168550109/ 200 in 78ms
+ ✓ Compiled in 218ms (498 modules)
+ ✓ Compiled in 180ms (333 modules)
+ GET /posts/1757168550109/ 200 in 88ms
+ ✓ Compiled / in 276ms (503 modules)
+ GET / 200 in 500ms
+ GET / 200 in 65ms
+ GET /login/ 200 in 41ms
+ GET /dashboard/ 200 in 40ms
+ ✓ Compiled in 165ms (333 modules)
+ ✓ Compiled in 241ms (333 modules)
+ GET /dashboard/ 200 in 190ms
+ GET /posts/1757168550109/ 200 in 139ms
+ GET /dashboard/ 200 in 42ms
+ GET /posts/1757168550109/ 200 in 37ms
+ ✓ Compiled in 257ms (503 modules)
+ ✓ Compiled in 251ms (503 modules)
+ ✓ Compiled in 197ms (503 modules)
+ ✓ Compiled in 183ms (503 modules)
+ GET /login/ 200 in 76ms
+ GET /dashboard/ 200 in 34ms
+ ✓ Compiled in 227ms (333 modules)
+ ✓ Compiled in 94ms (319 modules)
+ GET /posts/1757168550109/ 200 in 80ms
+ GET /dashboard/ 200 in 33ms
+ ✓ Compiled in 94ms (319 modules)
+ ✓ Compiled in 60ms (319 modules)
+ ✓ Compiled in 151ms (333 modules)
+ ✓ Compiled in 57ms (319 modules)
+ GET /dashboard/ 200 in 79ms
+ GET /posts/1757168550109/ 200 in 72ms
+ ✓ Compiled in 147ms (333 modules)
+ GET /dashboard/ 200 in 105ms
+ GET /posts/1757168550109/ 200 in 99ms
+ ✓ Compiled in 627ms (817 modules)
+ GET /dashboard/ 200 in 757ms
+ GET /posts/1757168550109/ 200 in 755ms
+ GET /dashboard/ 200 in 72ms
+ GET /posts/1757168550109/ 200 in 69ms
+ ✓ Compiled in 165ms (333 modules)
+ GET /dashboard/ 200 in 34ms
+ GET /posts/1757168550109/ 200 in 48ms
+ ✓ Compiled in 403ms (817 modules)
+ GET /dashboard/ 200 in 568ms
+ GET /posts/1757168550109/ 200 in 566ms
+ GET /dashboard/ 200 in 69ms
+ GET /posts/1757168550109/ 200 in 66ms
+ ✓ Compiled in 877ms (831 modules)
+ GET /dashboard/ 200 in 139ms
+ GET /posts/1757168550109/ 200 in 128ms
+ ✓ Compiled in 226ms (498 modules)
+ ✓ Compiled in 171ms (333 modules)
+ GET /dashboard/ 200 in 319ms
+ GET /posts/1757168550109/ 200 in 306ms
+ ✓ Compiled in 523ms (333 modules)
+ GET /dashboard/ 200 in 89ms
+ GET /posts/1757168550109/ 200 in 75ms
+ ✓ Compiled in 260ms (498 modules)
+ ✓ Compiled in 207ms (498 modules)
+ ✓ Compiled in 256ms (333 modules)
+ ✓ Compiled in 285ms (333 modules)
+ GET /dashboard/ 200 in 207ms
+ GET /posts/1757168550109/ 200 in 203ms
+ GET /dashboard/ 200 in 84ms
+ GET /posts/1757168550109/ 200 in 79ms
+ ✓ Compiled in 163ms (333 modules)
+ ✓ Compiled in 210ms (333 modules)
+ GET /dashboard/ 200 in 140ms
+ GET /posts/1757168550109/ 200 in 136ms
+ GET /dashboard/ 200 in 72ms
+ GET /posts/1757168550109/ 200 in 64ms
+ ✓ Compiled in 205ms (498 modules)
+ ✓ Compiled / in 324ms (836 modules)
+ GET / 200 in 524ms
+ GET /dashboard/ 200 in 102ms
+ GET /posts/1757168550109/ 200 in 99ms
+ GET / 200 in 82ms
+ GET /login/ 200 in 37ms
+ GET /dashboard/ 200 in 27ms
+ ✓ Compiled /admin/employees in 480ms (833 modules)
+ GET /admin/employees/ 200 in 547ms
+ ○ Compiling /posts/all ...
+ ✓ Compiled /posts/all in 566ms (840 modules)
+ GET /posts/all/ 200 in 644ms
+ ✓ Compiled in 244ms (515 modules)
+ ✓ Compiled in 146ms (339 modules)
+ ✓ Compiled in 187ms (339 modules)
+ GET /dashboard/ 200 in 113ms
+ GET /posts/1757168550109/ 200 in 100ms
+ ✓ Compiled in 185ms (339 modules)
+ GET /posts/1757168550109/ 200 in 82ms
+ GET /dashboard/ 200 in 78ms
+ GET /dashboard/ 200 in 34ms
+ GET /posts/1757168550109/ 200 in 32ms
+ ✓ Compiled in 243ms (510 modules)
