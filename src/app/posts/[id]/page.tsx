@@ -609,7 +609,7 @@ export default function PostDetailPage() {
                 <button
                   onClick={handleConfirmation}
                   disabled={isConfirmed}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors w-full sm:w-auto ${
                     isConfirmed
                       ? 'bg-green-100 text-green-700 cursor-not-allowed'
                       : 'bg-green-600 text-white hover:bg-green-700'
@@ -621,7 +621,7 @@ export default function PostDetailPage() {
                 {/* 확인자 목록 보기 버튼 */}
                 <button
                   onClick={() => setShowConfirmations(!showConfirmations)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center space-x-2"
+                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
                 >
                   <span>👥</span>
                   <span>확인자 ({confirmationStats.totalConfirmed}명)</span>
@@ -631,7 +631,7 @@ export default function PostDetailPage() {
                 {canEditPost() && (
                   <Link
                     href={`/posts/${post.id}/edit`}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
                     title="게시글 수정"
                   >
                     <span>✏️</span>
@@ -643,7 +643,7 @@ export default function PostDetailPage() {
                 {canDeletePost() && (
                   <button
                     onClick={openDeleteModal}
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center space-x-2"
+                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
                     title="게시글 삭제"
                   >
                     <span>🗑️</span>
@@ -740,8 +740,8 @@ export default function PostDetailPage() {
 
       {/* 삭제 확인 모달 */}
       {deleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 sm:p-6 max-w-md w-full">
             <div className="flex items-center mb-4">
               <span className="text-2xl mr-3">⚠️</span>
               <h3 className="text-lg font-semibold text-gray-900">게시글 삭제 확인</h3>

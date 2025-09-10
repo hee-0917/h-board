@@ -278,25 +278,25 @@ export default function EditPostPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link href="/dashboard" className="text-2xl mr-2">🏥</Link>
-              <h1 className="text-xl font-semibold text-gray-900">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex items-center min-w-0 flex-1">
+              <Link href="/dashboard" className="text-xl sm:text-2xl mr-2 flex-shrink-0">🏥</Link>
+              <h1 className="text-sm sm:text-xl font-semibold text-gray-900 truncate">
                 병원 직원 게시판
               </h1>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-sm text-gray-700">
+            <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
+              <div className="hidden sm:block text-sm text-gray-700">
                 <span className="font-medium">{employee?.name}</span>
                 {employee?.department_id && (
                   <span className="ml-2 text-gray-500">| {employee.department_id}</span>
                 )}
               </div>
               <Link href="/notifications" className="relative p-1">
-                <span className="text-2xl">🔔</span>
+                <span className="text-xl sm:text-2xl">🔔</span>
                 {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
                     {unreadCount}
                   </span>
                 )}
@@ -307,16 +307,17 @@ export default function EditPostPage() {
                   setEmployee(null)
                   router.push('/login')
                 }}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-gray-500 hover:text-gray-700 text-sm sm:text-base px-1 sm:px-2 py-1"
               >
-                로그아웃
+                <span className="hidden sm:inline">로그아웃</span>
+                <span className="sm:hidden">🚪</span>
               </button>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-8">
         {/* Breadcrumb */}
         <nav className="mb-6">
           <div className="flex items-center text-sm text-gray-500 space-x-2">
@@ -342,7 +343,7 @@ export default function EditPostPage() {
             <p className="text-gray-600 mt-1">게시글 내용을 수정할 수 있습니다.</p>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+          <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
             {/* 제목 */}
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
@@ -462,18 +463,18 @@ export default function EditPostPage() {
             </div>
 
             {/* 버튼 */}
-            <div className="flex items-center justify-end space-x-3 pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 sm:pt-6 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 w-full sm:w-auto"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2"
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-2 w-full sm:w-auto"
               >
                 {isSaving ? (
                   <>
