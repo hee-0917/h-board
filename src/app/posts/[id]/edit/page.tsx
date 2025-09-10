@@ -463,18 +463,18 @@ export default function EditPostPage() {
             </div>
 
             {/* 버튼 */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-3 pt-4 sm:pt-6 border-t border-gray-200">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4 sm:pt-6 border-t border-gray-200">
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-3 py-2 sm:px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 w-full sm:w-auto text-sm sm:text-base"
+                className="px-2 py-1 sm:px-3 md:px-4 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 w-full md:w-auto text-xs sm:text-sm md:text-base"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={isSaving}
-                className="px-4 py-2 sm:px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
+                className="px-3 py-1 sm:px-4 md:px-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center space-x-1 sm:space-x-2 w-full md:w-auto text-xs sm:text-sm md:text-base"
               >
                 {isSaving ? (
                   <>
