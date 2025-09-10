@@ -599,7 +599,7 @@ export default function PostDetailPage() {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => router.back()}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200"
+                className="bg-gray-100 text-gray-700 px-3 py-2 sm:px-4 rounded-lg hover:bg-gray-200 text-sm sm:text-base"
               >
                 ← 돌아가기
               </button>
@@ -609,7 +609,7 @@ export default function PostDetailPage() {
                 <button
                   onClick={handleConfirmation}
                   disabled={isConfirmed}
-                  className={`px-4 py-2 rounded-lg font-medium transition-colors w-full sm:w-auto ${
+                  className={`px-3 py-2 sm:px-4 rounded-lg font-medium transition-colors w-full sm:w-auto text-sm sm:text-base ${
                     isConfirmed
                       ? 'bg-green-100 text-green-700 cursor-not-allowed'
                       : 'bg-green-600 text-white hover:bg-green-700'
@@ -621,7 +621,7 @@ export default function PostDetailPage() {
                 {/* 확인자 목록 보기 버튼 */}
                 <button
                   onClick={() => setShowConfirmations(!showConfirmations)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
+                  className="bg-gray-600 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-gray-700 flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
                 >
                   <span>👥</span>
                   <span>확인자 ({confirmationStats.totalConfirmed}명)</span>
@@ -631,7 +631,7 @@ export default function PostDetailPage() {
                 {canEditPost() && (
                   <Link
                     href={`/posts/${post.id}/edit`}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
+                    className="bg-blue-600 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-blue-700 flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
                     title="게시글 수정"
                   >
                     <span>✏️</span>
@@ -643,7 +643,7 @@ export default function PostDetailPage() {
                 {canDeletePost() && (
                   <button
                     onClick={openDeleteModal}
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2 w-full sm:w-auto"
+                    className="bg-red-600 text-white px-3 py-2 sm:px-4 rounded-lg hover:bg-red-700 flex items-center justify-center space-x-2 w-full sm:w-auto text-sm sm:text-base"
                     title="게시글 삭제"
                   >
                     <span>🗑️</span>
