@@ -67,100 +67,56 @@ export default function DashboardPage() {
       if (!employee) return
 
       try {
-        // Mock 데이터 생성
-        const mockUrgentPosts = [
-          {
-            id: '1',
-            title: '코로나19 방역 지침 변경',
-            content: '새로운 방역 지침이 적용됩니다.',
-            author: { name: '박관리자', department: { name: '행정팀' } },
-            post_type: 'ALL' as const,
-            department_id: null,
-            is_urgent: true,
-            is_pinned: false,
-            attachments: null,
-            attachment_urls: null,
-            view_count: 247,
-            created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            author_id: 'EMP003'
-          }
-        ]
+        // 실제 데이터베이스에서 데이터 가져오기
+        const response = await fetch('/api/posts')
+        if (response.ok) {
+          const posts = await response.json()
+          
+          // 긴급 공지 필터링
+          const urgentPosts = posts
+            .filter((post: any) => post.is_urgent && (post.post_type === 'announcement' || post.post_type === 'ALL'))
+            .slice(0, 3)
+            .map((post: any) => ({
+              ...post,
+              author: {
+                name: post.employees?.name || '알 수 없음',
+                department: { name: post.employees?.department_id ? '부서' : null }
+              }
+            }))
 
-        const mockAllPosts = [
-          {
-            id: '2',
-            title: '12월 직원 교육 일정 안내',
-            content: '12월 교육 일정을 안내드립니다.',
-            author: { name: '박관리자', department: { name: '행정팀' } },
-            post_type: 'ALL' as const,
-            department_id: null,
-            is_urgent: false,
-            is_pinned: false,
-            attachments: null,
-            attachment_urls: null,
-            view_count: 156,
-            created_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            author_id: 'EMP003'
-          },
-          {
-            id: '3',
-            title: '연말 휴가 신청 기간 안내',
-            content: '연말 휴가 신청 안내드립니다.',
-            author: { name: '박관리자', department: { name: '행정팀' } },
-            post_type: 'ALL' as const,
-            department_id: null,
-            is_urgent: false,
-            is_pinned: false,
-            attachments: null,
-            attachment_urls: null,
-            view_count: 89,
-            created_at: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            author_id: 'EMP003'
-          }
-        ]
+          // 전체 공지 필터링 (최신 3개)
+          const allPosts = posts
+            .filter((post: any) => post.post_type === 'announcement' || post.post_type === 'ALL')
+            .slice(0, 3)
+            .map((post: any) => ({
+              ...post,
+              author: {
+                name: post.employees?.name || '알 수 없음',
+                department: { name: post.employees?.department_id ? '부서' : null }
+              }
+            }))
 
-        const mockDeptPosts = employee.department_id === 1 ? [
-          {
-            id: '4',
-            title: '의료진 회의 일정 변경',
-            content: '정기 의료진 회의 일정이 변경되었습니다.',
-            author: { name: '이간호사', department: { name: '의료진' } },
-            post_type: 'DEPARTMENT' as const,
-            department_id: '의료진',
-            is_urgent: false,
-            is_pinned: false,
-            attachments: null,
-            attachment_urls: null,
-            view_count: 43,
-            created_at: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            author_id: 'EMP002'
-          }
-        ] : employee.department_id === 3 ? [
-          {
-            id: '5',
-            title: '신약 입고 현황 공유',
-            content: '이번 주 신약 입고 현황을 공유드립니다.',
-            author: { name: '최약사', department: { name: '약제팀' } },
-            post_type: 'DEPARTMENT' as const,
-            department_id: '약제팀',
-            is_urgent: false,
-            is_pinned: false,
-            attachments: null,
-            attachment_urls: null,
-            view_count: 28,
-            created_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-            updated_at: new Date().toISOString(),
-            author_id: 'EMP004'
-          }
-        ] : []
+          // 부서별 공지 필터링 (해당 부서의 최신 3개)
+          const departmentPosts = posts
+            .filter((post: any) => 
+              (post.post_type === 'department' || post.post_type === 'DEPARTMENT') && 
+              post.department_id === employee.department_id
+            )
+            .slice(0, 3)
+            .map((post: any) => ({
+              ...post,
+              author: {
+                name: post.employees?.name || '알 수 없음',
+                department: { name: post.employees?.department_id ? '부서' : null }
+              }
+            }))
 
-        setUrgentPosts(mockUrgentPosts)
-        setAllPosts(mockAllPosts)
-        setDepartmentPosts(mockDeptPosts)
+          setUrgentPosts(urgentPosts)
+          setAllPosts(allPosts)
+          setDepartmentPosts(departmentPosts)
+        } else {
+          console.error('게시글 데이터를 가져올 수 없습니다.')
+        }
       } catch (error) {
         console.error('Error fetching posts:', error)
       } finally {
@@ -305,19 +261,21 @@ export default function DashboardPage() {
                   <h3 className="text-base sm:text-lg font-semibold text-red-600 mb-3 sm:mb-4">⚡ 긴급 공지</h3>
                   <div className="space-y-2 sm:space-y-3">
                     {urgentPosts.map((post) => (
-                      <div key={post.id} className="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded">
-                        <div className="flex items-start sm:items-center">
-                          <span className="text-base sm:text-lg mr-2 flex-shrink-0">🚨</span>
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-red-800 text-sm sm:text-base break-words">
-                              [긴급] {post.title}
-                            </h4>
-                            <p className="text-xs sm:text-sm text-red-600 mt-1">
-                              {post.author.name} • {formatTimeAgo(post.created_at)}
-                            </p>
+                      <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                        <div className="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded hover:bg-red-100 transition-colors cursor-pointer">
+                          <div className="flex items-start sm:items-center">
+                            <span className="text-base sm:text-lg mr-2 flex-shrink-0">🚨</span>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-red-800 text-sm sm:text-base break-words">
+                                [긴급] {post.title}
+                              </h4>
+                              <p className="text-xs sm:text-sm text-red-600 mt-1">
+                                {post.author.name} • {formatTimeAgo(post.created_at)}
+                              </p>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
                 </section>
@@ -334,17 +292,19 @@ export default function DashboardPage() {
                   ) : (
                     <div className="divide-y divide-gray-200">
                       {allPosts.map((post) => (
-                        <div key={post.id} className="p-3 sm:p-4 hover:bg-gray-50">
-                          <div className="flex items-start sm:items-center">
-                            <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">📋</span>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
-                              <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                                {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
-                              </p>
+                        <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                          <div className="p-3 sm:p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div className="flex items-start sm:items-center">
+                              <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">📋</span>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
+                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                                  {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -362,17 +322,19 @@ export default function DashboardPage() {
                   ) : (
                     <div className="divide-y divide-gray-200">
                       {departmentPosts.map((post) => (
-                        <div key={post.id} className="p-3 sm:p-4 hover:bg-gray-50">
-                          <div className="flex items-start sm:items-center">
-                            <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">💊</span>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
-                              <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                                {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
-                              </p>
+                        <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                          <div className="p-3 sm:p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                            <div className="flex items-start sm:items-center">
+                              <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">💊</span>
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
+                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
+                                  {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
+                                </p>
+                              </div>
                             </div>
                           </div>
-                        </div>
+                        </Link>
                       ))}
                     </div>
                   )}

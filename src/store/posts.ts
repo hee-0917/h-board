@@ -86,16 +86,20 @@ export const usePostsStore = create<PostsState>((set, get) => ({
   },
 
   incrementViewCount: async (postId: number) => {
-    await postApi.incrementViewCount(postId)
-    
-    // 로컬 상태도 업데이트
-    set(state => ({
-      posts: state.posts.map(post =>
-        post.id === postId
-          ? { ...post, view_count: post.view_count + 1 }
-          : post
-      )
-    }))
+    try {
+      await postApi.incrementViewCount(postId)
+      
+      // 로컬 상태도 업데이트
+      set(state => ({
+        posts: state.posts.map(post =>
+          post.id === postId
+            ? { ...post, view_count: post.view_count + 1 }
+            : post
+        )
+      }))
+    } catch (error) {
+      console.error('조회수 증가 실패:', error)
+    }
   },
 
   initializePosts: async () => {

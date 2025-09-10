@@ -184,12 +184,11 @@ export const postApi = {
       })
 
       if (error) {
-        console.log(`Mock: View count incremented for post ${postId}`)
-        incrementMockPostViewCount(postId)
+        console.log(`조회수 증가 실패:`, error)
+        // 에러가 발생해도 무한 루프를 방지하기 위해 아무것도 하지 않음
       }
     } catch (error) {
       console.error('Increment view count API error:', error)
-      incrementMockPostViewCount(postId)
     }
   },
 

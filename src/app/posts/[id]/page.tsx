@@ -35,7 +35,7 @@ type Post = {
 
 export default function PostDetailPage() {
   const { employee, setUser, setEmployee } = useAuthStore()
-  const { posts: allPosts, incrementViewCount } = usePostsStore()
+  const { posts: allPosts } = usePostsStore()
   const { 
     confirmPost, 
     isPostConfirmedByEmployee, 
@@ -50,6 +50,7 @@ export default function PostDetailPage() {
   const [showConfirmations, setShowConfirmations] = useState(false)
   const [error, setError] = useState('')
   const [viewCountIncremented, setViewCountIncremented] = useState(false)
+  const [isIncrementingView, setIsIncrementingView] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
 
@@ -288,13 +289,34 @@ export default function PostDetailPage() {
     fetchConfirmations()
   }, [fetchConfirmations])
 
+  // 조회수 증가 함수
+  const incrementViewCount = async () => {
+    if (!post || !post.id || isIncrementingView || viewCountIncremented) return;
+    
+    setIsIncrementingView(true);
+    try {
+      const response = await fetch(`/api/posts/${post.id}/view`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        setViewCountIncremented(true);
+        // 로컬 상태에서 조회수 증가
+        setPost(prev => prev ? { ...prev, view_count: prev.view_count + 1 } : null);
+      }
+    } catch (error) {
+      console.error('조회수 증가 실패:', error);
+    } finally {
+      setIsIncrementingView(false);
+    }
+  };
+
   // 조회수 증가 (한 번만 실행)
   useEffect(() => {
-    if (post && post.id && !viewCountIncremented) {
-      incrementViewCount(Number(post.id));
-      setViewCountIncremented(true);
+    if (post && post.id && !viewCountIncremented && !isIncrementingView) {
+      incrementViewCount();
     }
-  }, [post?.id, viewCountIncremented, incrementViewCount]);
+  }, [post?.id, viewCountIncremented, isIncrementingView]);
 
   // 확인 버튼 클릭 핸들러
   const handleConfirmation = async () => {
@@ -464,6 +486,12 @@ export default function PostDetailPage() {
               <h1 className="text-xl font-semibold text-gray-900">
                 병원 직원 게시판
               </h1>
+              <Link 
+                href="/dashboard" 
+                className="ml-4 bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 text-sm font-medium"
+              >
+                🏠 홈
+              </Link>
             </div>
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-700">
@@ -598,10 +626,10 @@ export default function PostDetailPage() {
           <div className="border-t border-gray-200 p-6">
             <div className="flex items-center justify-between">
               <button
-                onClick={() => router.back()}
+                onClick={() => router.push('/dashboard')}
                 className="bg-gray-100 text-gray-700 px-2 py-1 sm:px-3 md:px-4 rounded-lg hover:bg-gray-200 text-xs sm:text-sm md:text-base w-full md:w-auto"
               >
-                ← 돌아가기
+                🏠 홈으로 돌아가기
               </button>
               
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
