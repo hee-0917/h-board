@@ -2,7 +2,6 @@
 const nextConfig = {
   // output: 'export', // 이 설정을 제거하여 동적 라우팅 활성화
   trailingSlash: true,
-  outputFileTracingRoot: '/workspace/hospital-board',
   eslint: {
     // 빌드 시 ESLint 오류를 무시
     ignoreDuringBuilds: true,
