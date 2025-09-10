@@ -68,7 +68,7 @@ export async function PATCH(
     // 권한 확인
     const canEdit = 
       employee_id === '9999' || // 시스템관리자
-      employee_id === post.author_id // 작성자 본인
+      String(employee_id) === String(post.author_id) // 작성자 본인
 
     if (!canEdit) {
       return NextResponse.json({ error: '수정 권한이 없습니다.' }, { status: 403 })

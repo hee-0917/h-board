@@ -100,6 +100,8 @@ export default function EditPostPage() {
         if (response.ok) {
           const data = await response.json()
           setDepartments(data)
+        } else {
+          console.error('부서 정보 조회 실패:', response.status)
         }
       } catch (error) {
         console.error('부서 정보 조회 오류:', error)
@@ -119,7 +121,7 @@ export default function EditPostPage() {
     // 시스템관리자 사번 9999는 모든 공지 수정 가능
     if (employee.employee_id === '9999') return true
     
-    // 작성자 본인만 수정 가능
+    // 작성자 본인만 수정 가능 - 타입 안전하게 비교
     return String(post.author_id) === String(employee.id)
   }
 
@@ -157,6 +159,11 @@ export default function EditPostPage() {
       return
     }
     
+    if (formData.title.trim().length > 255) {
+      alert('제목은 255자를 초과할 수 없습니다.')
+      return
+    }
+    
     if (!formData.content.trim()) {
       alert('내용을 입력해주세요.')
       return
@@ -191,23 +198,18 @@ export default function EditPostPage() {
       if (response.ok) {
         // 스토어 업데이트
         updatePost({
-          id: String(post.id),
+          id: Number(post.id),
           title: formData.title,
           content: formData.content,
-          post_type: formData.post_type,
-          department_id: formData.post_type === 'DEPARTMENT' ? formData.department_id : null,
+          author_id: Number(post.author_id),
+          department_id: formData.post_type === 'DEPARTMENT' ? Number(formData.department_id) : null,
+          post_type: formData.post_type === 'ALL' ? 'announcement' : 'department',
           is_urgent: formData.is_urgent,
           is_pinned: formData.is_pinned,
-          author: {
-            name: employee?.name || '',
-            department: {
-              name: employee?.department_id || ''
-            }
-          },
           view_count: 0,
+          attachment_urls: null,
           created_at: post.created_at,
-          updated_at: new Date().toISOString(),
-          author_id: String(post.author_id)
+          updated_at: new Date().toISOString()
         })
         
         alert('게시글이 성공적으로 수정되었습니다.')

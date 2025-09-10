@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function TestPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -26,12 +28,12 @@ export default function TestPage() {
           </div>
         </div>
         <div className="mt-6">
-          <a 
+          <Link 
             href="/" 
             className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
           >
             메인 페이지로 이동
-          </a>
+          </Link>
         </div>
       </div>
     </div>

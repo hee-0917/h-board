@@ -336,11 +336,20 @@ export default function PostDetailPage() {
   const canEditPost = () => {
     if (!employee || !post) return false
     
+    console.log('🔍 수정 권한 확인:', {
+      employee_id: employee.id,
+      employee_employee_id: employee.employee_id,
+      post_author_id: post.author_id,
+      employee_role: employee.role
+    })
+    
     // 시스템관리자 사번 9999는 모든 공지 수정 가능
     if (employee.employee_id === '9999') return true
     
-    // 작성자 본인만 수정 가능
-    return String(post.author_id) === String(employee.id)
+    // 작성자 본인만 수정 가능 - 타입 안전하게 비교
+    const canEdit = String(post.author_id) === String(employee.id)
+    console.log('🔍 수정 가능 여부:', canEdit)
+    return canEdit
   }
 
   // 삭제 모달 열기
