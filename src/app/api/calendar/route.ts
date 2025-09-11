@@ -1,15 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-
-// 이전 버전 방식으로 클라이언트 생성
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+import { createClient } from '@/lib/supabase/server'
 
 // 캘린더 이벤트 조회
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const department_id = searchParams.get('department_id')
     const employee_id = searchParams.get('employee_id')
@@ -59,6 +54,7 @@ export async function GET(request: NextRequest) {
 // 캘린더 이벤트 생성
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     console.log('📅 캘린더 POST API 호출됨')
     const body = await request.json()
     console.log('📅 요청 body:', body)
@@ -106,6 +102,7 @@ export async function POST(request: NextRequest) {
 // 캘린더 이벤트 수정
 export async function PUT(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const body = await request.json()
     const { id, title, type, date, description, status } = body
 
@@ -149,6 +146,7 @@ export async function PUT(request: NextRequest) {
 // 캘린더 이벤트 삭제
 export async function DELETE(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 
