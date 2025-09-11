@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/auth'
 import { usePostsStore, PostWithAuthor } from '@/store/posts'
 import { useConfirmationsStore } from '@/store/confirmations'
+import { Post } from '@/types/database'
 import { useNotificationsStore } from '@/store/notifications'
 import { postApi } from '@/lib/supabase/api'
 import Link from 'next/link'
@@ -13,15 +14,15 @@ import Sidebar from '@/components/Sidebar'
 export default function DepartmentPostsPage() {
   const { employee, setUser, setEmployee } = useAuthStore()
   const { posts: allPosts, initializePosts } = usePostsStore()
-  const { isConfirmedByEmployee, getConfirmationStats } = useConfirmationsStore()
+  const { isPostConfirmedByEmployee, getConfirmationCount } = useConfirmationsStore()
   const { unreadCount, fetchNotifications } = useNotificationsStore()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([])
+  const [filteredPosts, setFilteredPosts] = useState<PostWithAuthor[]>([])
   const [departmentName, setDepartmentName] = useState<string>('')
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
-  const [postToDelete, setPostToDelete] = useState<Post | null>(null)
+  const [postToDelete, setPostToDelete] = useState<PostWithAuthor | null>(null)
   const [isDeleting, setIsDeleting] = useState(false)
 
   // 부서 이름 가져오기
@@ -102,7 +103,7 @@ export default function DepartmentPostsPage() {
       const filtered = departmentPosts.filter(post =>
         post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.author.name.toLowerCase().includes(searchTerm.toLowerCase())
+        post.author?.name.toLowerCase().includes(searchTerm.toLowerCase())
       )
       setFilteredPosts(filtered)
     } else {
@@ -132,13 +133,13 @@ export default function DepartmentPostsPage() {
     }
   }
 
-  const getPostIcon = (post: Post) => {
+  const getPostIcon = (post: PostWithAuthor) => {
     if (post.is_pinned) return '📌'
     if (post.is_urgent) return '🚨'
     return '📋'
   }
 
-  const getPostPrefix = (post: Post) => {
+  const getPostPrefix = (post: PostWithAuthor) => {
     if (post.is_pinned) return '[고정]'
     if (post.is_urgent) return '[긴급]'
     return ''
@@ -154,7 +155,7 @@ export default function DepartmentPostsPage() {
   }
 
   // 삭제 권한 확인 함수
-  const canDeletePost = (post: Post) => {
+  const canDeletePost = (post: PostWithAuthor) => {
     if (!employee) return false
     
     // 시스템관리자 사번 9999는 모든 공지 삭제 가능
@@ -167,7 +168,7 @@ export default function DepartmentPostsPage() {
   }
 
   // 삭제 모달 열기
-  const openDeleteModal = (post: Post) => {
+  const openDeleteModal = (post: PostWithAuthor) => {
     setPostToDelete(post)
     setDeleteModalOpen(true)
   }
@@ -277,7 +278,7 @@ export default function DepartmentPostsPage() {
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
                 <h2 className="text-xl sm:text-2xl font-bold text-gray-900 flex items-center">
-                  <span className="mr-2 sm:mr-3 text-lg sm:text-xl">{getDepartmentIcon(employee.department_id)}</span>
+                  <span className="mr-2 sm:mr-3 text-lg sm:text-xl">{getDepartmentIcon(employee?.department_id?.toString())}</span>
                   <span className="break-words">
                     {departmentName || '부서'} 공지
                   </span>
@@ -294,7 +295,7 @@ export default function DepartmentPostsPage() {
               {/* Department Info */}
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
                 <div className="flex items-center">
-                  <span className="text-2xl mr-3">{getDepartmentIcon(employee.department_id)}</span>
+                  <span className="text-2xl mr-3">{getDepartmentIcon(employee?.department_id?.toString())}</span>
                   <div>
                     <h3 className="font-medium text-blue-900">
                       {departmentName || '부서'} 전용 공지사항
@@ -345,7 +346,7 @@ export default function DepartmentPostsPage() {
                       <div key={post.id} className="hover:bg-gray-50 transition-colors">
                         <div className="p-6">
                           <div className="flex items-start justify-between">
-                            <Link href={`/posts/${post.id}`} className="flex-1">
+                            <Link href={`/posts/${post.id.toString()}`} className="flex-1">
                               <div className="flex items-center space-x-2 mb-2">
                                 <span className="text-xl">{getPostIcon(post)}</span>
                                 <h3 className="text-lg font-medium text-gray-900">
@@ -364,7 +365,7 @@ export default function DepartmentPostsPage() {
                                 {post.content}
                               </p>
                               <div className="flex items-center text-sm text-gray-500 space-x-4">
-                                <span>{post.author.name}</span>
+                                <span>{post.author?.name}</span>
                                 <span>•</span>
                                 <span>{formatTimeAgo(post.created_at)}</span>
                                 <span>•</span>

@@ -34,7 +34,7 @@ export default function EmployeeListPage() {
     let filtered = employees
 
     // 부서 관리자는 본인 부서 직원만 볼 수 있음
-    if (employee.role === 'DEPARTMENT_ADMIN' && employee.department_id) {
+    if (employee && employee.role === 'DEPARTMENT_ADMIN' && employee.department_id) {
       filtered = employees.filter(emp => emp.department_id === employee.department_id)
     }
 
@@ -71,7 +71,7 @@ export default function EmployeeListPage() {
     if (!confirm('정말로 이 직원을 삭제하시겠습니까?')) return
 
     try {
-      const response = await fetch(`/api/employees/${employeeId}?admin_employee_id=${employee.id}`, {
+      const response = await fetch(`/api/employees/${employeeId}?admin_employee_id=${employee?.id}`, {
         method: 'DELETE'
       })
 
@@ -97,8 +97,8 @@ export default function EmployeeListPage() {
         },
         body: JSON.stringify({ 
           is_active: !currentStatus,
-          admin_employee_id: employee.id,
-          admin_role: employee.role
+          admin_employee_id: employee?.id,
+          admin_role: employee?.role
         })
       })
 
@@ -334,8 +334,8 @@ export default function EmployeeListPage() {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                             {/* 권한 검증: SUPER_ADMIN이거나 같은 부서의 DEPARTMENT_ADMIN만 관리 가능 */}
-                            {(employee.role === 'SUPER_ADMIN' || 
-                              (employee.role === 'DEPARTMENT_ADMIN' && emp.department_id === employee.department_id)) && (
+                            {(employee?.role === 'SUPER_ADMIN' || 
+                              (employee?.role === 'DEPARTMENT_ADMIN' && emp.department_id === employee?.department_id)) && (
                               <>
                                 <button
                                   onClick={() => handleToggleActive(emp.id, emp.is_active)}
@@ -356,8 +356,8 @@ export default function EmployeeListPage() {
                               </>
                             )}
                             {/* 권한이 없는 경우 */}
-                            {!(employee.role === 'SUPER_ADMIN' || 
-                              (employee.role === 'DEPARTMENT_ADMIN' && emp.department_id === employee.department_id)) && (
+                            {!(employee?.role === 'SUPER_ADMIN' || 
+                              (employee?.role === 'DEPARTMENT_ADMIN' && emp.department_id === employee?.department_id)) && (
                               <span className="text-xs text-gray-400">권한 없음</span>
                             )}
                           </td>

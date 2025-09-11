@@ -93,6 +93,7 @@ export function parseExcelFile(file: File): Promise<EmployeeData[]> {
             return employee
           })
           .filter(emp => emp.employee_id && emp.name && emp.department_name) // 필수 필드가 있는 것만
+          .map(emp => emp as EmployeeData) // 필터링 후 완전한 타입으로 변환
         
         resolve(employees)
       } catch (error) {

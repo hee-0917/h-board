@@ -60,12 +60,8 @@ export const useConfirmationsStore = create<ConfirmationsState>((set, get) => ({
 
   unconfirmPost: async (postId: number, employeeId: number) => {
     try {
-      const success = await confirmationApi.unconfirm(postId, employeeId)
-      if (success) {
-        // 확인 목록 다시 가져오기
-        await get().fetchConfirmations()
-        return true
-      }
+      // unconfirm API가 없으므로 임시로 false 반환
+      console.log('unconfirm API not implemented')
       return false
     } catch (error) {
       console.error('Error unconfirming post:', error)
