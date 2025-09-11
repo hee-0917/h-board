@@ -75,11 +75,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create post' }, { status: 500 })
     }
 
-    // 모든 직원에게 알림 생성
+    // 적절한 직원들에게 알림 생성 (작성자 제외)
     try {
-      const { data: employees } = await supabase
+      let employeeQuery = supabase
         .from('employees')
-        .select('id')
+        .select('id, department_id')
+        .neq('id', author_id) // 작성자 본인 제외
+        .eq('is_active', true) // 활성 직원만
+
+      // 부서별 공지사항인 경우 해당 부서 직원만 대상
+      if (department_id) {
+        employeeQuery = employeeQuery.eq('department_id', department_id)
+      }
+
+      const { data: employees } = await employeeQuery
 
       if (employees && employees.length > 0) {
         const employeeIds = employees.map(emp => emp.id)
@@ -106,6 +115,8 @@ export async function POST(request: NextRequest) {
         if (notificationError) {
           console.error('알림 생성 오류:', notificationError)
           // 알림 생성 실패해도 게시글은 성공으로 처리
+        } else {
+          console.log(`✅ ${employees.length}명에게 알림 생성 완료 (부서ID: ${department_id || '전체'})`)
         }
       }
     } catch (notificationError) {

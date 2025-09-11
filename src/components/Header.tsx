@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/auth'
+import { useNotificationsStore } from '@/store/notifications'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
@@ -11,6 +12,7 @@ interface HeaderProps {
 
 export default function Header({ showAdminMode = false }: HeaderProps) {
   const { employee, setUser, setEmployee, isAdminMode, setAdminMode } = useAuthStore()
+  const { unreadCount, fetchNotifications } = useNotificationsStore()
   const router = useRouter()
   const [departmentName, setDepartmentName] = useState<string>('')
 
@@ -34,6 +36,13 @@ export default function Header({ showAdminMode = false }: HeaderProps) {
 
     fetchDepartmentName()
   }, [employee?.department_id])
+
+  // 알림 데이터 가져오기
+  useEffect(() => {
+    if (employee?.id) {
+      fetchNotifications(employee.id)
+    }
+  }, [employee?.id, fetchNotifications])
 
   const handleLogout = () => {
     setUser(null)
@@ -119,12 +128,14 @@ export default function Header({ showAdminMode = false }: HeaderProps) {
 
             {/* 알림 */}
             {!showAdminMode && (
-              <button className="relative p-1">
+              <Link href="/notifications" className="relative p-1">
                 <span className="text-2xl">🔔</span>
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  3
-                </span>
-              </button>
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </Link>
             )}
 
             <button 

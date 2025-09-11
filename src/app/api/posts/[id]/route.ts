@@ -9,6 +9,8 @@ export async function GET(
   try {
     const supabase = await createClient()
     const { id } = await params
+    const { searchParams } = new URL(request.url)
+    const employeeId = searchParams.get('employee_id') // 읽는 사람의 ID
 
     const { data, error } = await supabase
       .from('posts')
@@ -25,6 +27,27 @@ export async function GET(
     if (error) {
       console.error('게시글 조회 오류:', error)
       return NextResponse.json({ error: '게시글을 찾을 수 없습니다.' }, { status: 404 })
+    }
+
+    // 해당 게시글의 알림을 읽음 처리 (employeeId가 있는 경우)
+    if (employeeId) {
+      try {
+        const { error: notificationError } = await supabase
+          .from('notifications')
+          .update({ is_read: true })
+          .eq('post_id', id)
+          .eq('employee_id', employeeId)
+          .eq('is_read', false) // 아직 읽지 않은 것만
+
+        if (notificationError) {
+          console.error('알림 읽음 처리 오류:', notificationError)
+          // 알림 처리 실패해도 게시글 조회는 성공으로 처리
+        } else {
+          console.log(`✅ 게시글 ${id} 알림 읽음 처리 완료 (직원 ${employeeId})`)
+        }
+      } catch (notificationError) {
+        console.error('알림 읽음 처리 중 오류:', notificationError)
+      }
     }
 
     return NextResponse.json(data)

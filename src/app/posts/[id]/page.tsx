@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useAuthStore } from '@/store/auth'
 import { usePostsStore } from '@/store/posts'
 import { useConfirmationsStore } from '@/store/confirmations'
+import { useNotificationsStore } from '@/store/notifications'
 import { postApi } from '@/lib/supabase/api'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
@@ -43,6 +44,7 @@ export default function PostDetailPage() {
     getConfirmationCount,
     fetchConfirmations
   } = useConfirmationsStore()
+  const { fetchNotifications } = useNotificationsStore()
   const params = useParams()
   const router = useRouter()
   const [post, setPost] = useState<Post | null>(null)
@@ -62,9 +64,10 @@ export default function PostDetailPage() {
         // 조회수 증가 플래그 리셋
         setViewCountIncremented(false);
         
-        // 먼저 API에서 게시글 조회
+        // 먼저 API에서 게시글 조회 (employee_id 포함하여 알림 읽음 처리)
         try {
-          const response = await fetch(`/api/posts/${postId}`);
+          const employeeParam = employee?.id ? `?employee_id=${employee.id}` : '';
+          const response = await fetch(`/api/posts/${postId}${employeeParam}`);
           
           if (response.ok) {
             const postData = await response.json();
@@ -90,6 +93,11 @@ export default function PostDetailPage() {
               attachments: postData.attachment_urls ? JSON.parse(postData.attachment_urls) : undefined
             });
             setIsLoading(false);
+            
+            // 게시글 조회 후 알림 상태 새로고침
+            if (employee?.id) {
+              fetchNotifications(employee.id);
+            }
             return;
           }
         } catch (apiError) {
