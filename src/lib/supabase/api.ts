@@ -126,26 +126,25 @@ export const postApi = {
     }
   },
 
-  // 게시글 생성
+  // 게시글 생성 - 알림 생성을 포함한 /api/posts API 사용
   async create(post: Database['public']['Tables']['posts']['Insert']): Promise<Post | null> {
     console.log('=== 게시글 생성 시작 ===')
     console.log('전송할 데이터:', JSON.stringify(post, null, 2))
     
     try {
-      const { data, error } = await supabase
-        .from('posts')
-        .insert(post)
-        .select()
-        .single()
+      const response = await fetch('/api/posts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(post)
+      })
 
-      if (error) {
-        console.error('❌ Supabase 게시글 생성 실패:', error)
-        console.error('❌ Error message:', error.message)
-        console.error('❌ Error details:', error.details) 
-        console.error('❌ Error hint:', error.hint)
-        console.error('❌ Error code:', error.code)
-        console.error('❌ Post data:', JSON.stringify(post, null, 2))
-        // Supabase 실패 시에만 Mock 데이터 사용
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error('❌ 게시글 생성 API 실패:', errorData)
+        
+        // API 실패 시 Mock 데이터 사용
         const mockPost: Post = {
           id: Date.now(), // 임시 ID
           title: post.title,
@@ -167,9 +166,10 @@ export const postApi = {
         return mockPost
       }
 
-      console.log('✅ Supabase에 성공적으로 저장됨!')
-      console.log('✅ 저장된 데이터:', JSON.stringify(data, null, 2))
-      return data
+      const data = await response.json()
+      console.log('✅ 게시글 생성 및 알림 생성 완료!')
+      console.log('✅ 저장된 데이터:', JSON.stringify(data.post, null, 2))
+      return data.post
     } catch (error) {
       console.error('게시글 생성 오류:', error)
       throw error // 오류를 상위로 전달

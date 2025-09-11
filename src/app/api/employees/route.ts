@@ -2,15 +2,26 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import bcrypt from 'bcryptjs'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
+    const { searchParams } = new URL(request.url)
+    const department_id = searchParams.get('department_id')
     
-    // 먼저 직원 정보 가져오기
-    const { data: employees, error } = await supabase
+    console.log('👥 직원 조회 요청:', { department_id })
+    
+    // 먼저 직원 정보 가져오기 (부서별 필터링 적용)
+    let query = supabase
       .from('employees')
       .select('*')
       .order('id')
+    
+    // 부서별 필터링
+    if (department_id) {
+      query = query.eq('department_id', department_id)
+    }
+    
+    const { data: employees, error } = await query
 
     if (error) {
       console.error('Error fetching employees:', error)
@@ -36,6 +47,7 @@ export async function GET() {
       }
     })
 
+    console.log('👥 직원 조회 성공, 개수:', formattedEmployees.length)
     return NextResponse.json(formattedEmployees)
   } catch (error) {
     console.error('Error:', error)

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import { useAuthStore } from '@/store/auth'
-import { useNotificationsStore } from '@/store/notifications'
 import { Database } from '@/types/database'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import Sidebar from '@/components/Sidebar'
+import Header from '@/components/Header'
+import Calendar from '@/components/Calendar'
 
 type Post = Database['public']['Tables']['posts']['Row'] & {
   author: {
@@ -18,49 +18,11 @@ type Post = Database['public']['Tables']['posts']['Row'] & {
 }
 
 export default function DashboardPage() {
-  const { 
-    employee, 
-    setUser, 
-    setEmployee, 
-    isAdminMode, 
-    setAdminMode, 
-    isAdmin 
-  } = useAuthStore()
-  const { unreadCount, fetchNotifications } = useNotificationsStore()
-  const router = useRouter()
+  const { employee } = useAuthStore()
   const [urgentPosts, setUrgentPosts] = useState<Post[]>([])
   const [allPosts, setAllPosts] = useState<Post[]>([])
   const [departmentPosts, setDepartmentPosts] = useState<Post[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [departmentName, setDepartmentName] = useState<string>('')
-
-  // 부서 이름 가져오기
-  useEffect(() => {
-    const fetchDepartmentName = async () => {
-      if (!employee?.department_id) return
-      
-      try {
-        const response = await fetch('/api/departments')
-        const departments = await response.json()
-        const currentDepartment = departments.find((dept: { id: number; name: string }) => dept.id === employee.department_id)
-        
-        if (currentDepartment) {
-          setDepartmentName(currentDepartment.name)
-        }
-      } catch (error) {
-        console.error('부서 정보 조회 오류:', error)
-      }
-    }
-
-    fetchDepartmentName()
-  }, [employee?.department_id])
-
-  // 알림 데이터 로드
-  useEffect(() => {
-    if (employee?.id) {
-      fetchNotifications(employee.id)
-    }
-  }, [employee?.id])
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -150,195 +112,224 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full opacity-5 blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-400 rounded-full opacity-5 blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-400 rounded-full opacity-3 blur-3xl"></div>
+      </div>
+
       {/* Header */}
-      <header className={`shadow ${
-        isAdminMode ? 'bg-red-600 text-white' : 'bg-white'
-      }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              <span className="text-xl sm:text-2xl mr-1 sm:mr-2">🏥</span>
-              <h1 className={`text-lg sm:text-xl font-semibold ${
-                isAdminMode ? 'text-white' : 'text-gray-900'
-              }`}>
-                <span className="hidden sm:inline">병원 직원 게시판</span>
-                <span className="sm:hidden">병원 게시판</span>
-              </h1>
-              {isAdminMode && (
-                <span className="bg-red-800 text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
-                  <span className="hidden sm:inline">🛡️ 관리자 모드</span>
-                  <span className="sm:hidden">🛡️</span>
-                </span>
-              )}
-            </div>
-            <div className="flex items-center space-x-2 sm:space-x-4">
-              {/* 권한 표시 - 모바일에서 간소화 */}
-              <div className={`text-xs sm:text-sm ${isAdminMode ? 'text-red-100' : 'text-gray-700'} hidden sm:block`}>
-                <span className="font-medium">{employee?.name}</span>
-                {departmentName && (
-                  <span className={`ml-2 ${isAdminMode ? 'text-red-200' : 'text-gray-500'}`}>
-                    | {departmentName}
-                  </span>
-                )}
-                {employee?.role && (
-                  <span className={`ml-2 px-2 py-1 rounded text-xs font-medium ${
-                    employee.role === 'SUPER_ADMIN' ? 'bg-red-100 text-red-800' :
-                    employee.role === 'DEPARTMENT_ADMIN' ? 'bg-blue-100 text-blue-800' :
-                    employee.role === 'MODERATOR' ? 'bg-green-100 text-green-800' :
-                    'bg-gray-100 text-gray-800'
-                  }`}>
-                    {employee.role === 'SUPER_ADMIN' ? '👑 슈퍼관리자' :
-                     employee.role === 'DEPARTMENT_ADMIN' ? '🛡️ 부서관리자' :
-                     employee.role === 'MODERATOR' ? '📝 게시판관리자' :
-                     '👤 일반직원'}
-                  </span>
-                )}
-              </div>
+      <Header showAdminMode={true} />
 
-              {/* 모바일용 간소화된 사용자 정보 */}
-              <div className={`text-xs sm:hidden ${isAdminMode ? 'text-red-100' : 'text-gray-700'}`}>
-                <span className="font-medium">{employee?.name}</span>
-              </div>
-
-              {/* 관리자 모드 토글 (관리자만 표시) */}
-              {isAdmin() && (
-                <button
-                  onClick={() => setAdminMode(!isAdminMode)}
-                  className={`px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    isAdminMode 
-                      ? 'bg-red-800 text-white hover:bg-red-700' 
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  <span className="hidden sm:inline">
-                    {isAdminMode ? '👤 일반 모드' : '🛡️ 관리자 모드'}
-                  </span>
-                  <span className="sm:hidden">
-                    {isAdminMode ? '👤' : '🛡️'}
-                  </span>
-                </button>
-              )}
-
-              <Link href="/notifications" className="relative p-1 hover:bg-gray-100 rounded-lg transition-colors">
-                <span className="text-xl sm:text-2xl">🔔</span>
-                {unreadCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </Link>
-              <button 
-                onClick={() => {
-                  setUser(null)
-                  setEmployee(null)
-                  setAdminMode(false)
-                  router.push('/login')
-                }}
-                className={`text-xs sm:text-sm ${isAdminMode ? 'text-red-200 hover:text-white' : 'text-gray-500 hover:text-gray-700'}`}
-              >
-                <span className="hidden sm:inline">로그아웃</span>
-                <span className="sm:hidden">로그아웃</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
         <div className="flex flex-col lg:flex-row">
           {/* Sidebar - Imported Component */}
           <Sidebar currentPath="/dashboard" />
 
           {/* Main Content */}
           <main className="flex-1 lg:ml-0 mt-16 lg:mt-0">
-            <div className="space-y-4 sm:space-y-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">📊 대시보드</h2>
+            <div className="space-y-6 sm:space-y-8">
+              {/* Dashboard Header */}
+              <div className="text-center lg:text-left">
+                <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+                  📊 대시보드
+                </h2>
+                <p className="text-gray-600 text-lg">
+                  병원 운영의 모든 정보를 한눈에 확인하세요
+                </p>
+              </div>
 
               {/* Urgent Posts */}
               {urgentPosts.length > 0 && (
                 <section>
-                  <h3 className="text-base sm:text-lg font-semibold text-red-600 mb-3 sm:mb-4">⚡ 긴급 공지</h3>
-                  <div className="space-y-2 sm:space-y-3">
-                    {urgentPosts.map((post) => (
-                      <Link key={post.id} href={`/posts/${post.id}`} className="block">
-                        <div className="bg-red-50 border-l-4 border-red-500 p-3 sm:p-4 rounded hover:bg-red-100 transition-colors cursor-pointer">
-                          <div className="flex items-start sm:items-center">
-                            <span className="text-base sm:text-lg mr-2 flex-shrink-0">🚨</span>
-                            <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-red-800 text-sm sm:text-base break-words">
-                                [긴급] {post.title}
-                              </h4>
-                              <p className="text-xs sm:text-sm text-red-600 mt-1">
-                                {post.author.name} • {formatTimeAgo(post.created_at)}
-                              </p>
-                            </div>
-                          </div>
+                  <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-2xl p-1 shadow-lg">
+                    <div className="bg-white rounded-xl p-6">
+                      <div className="flex items-center mb-4">
+                        <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-full p-2 mr-3">
+                          <span className="text-white text-xl">⚡</span>
                         </div>
-                      </Link>
-                    ))}
+                        <h3 className="text-xl font-bold text-gray-900">긴급 공지</h3>
+                        <div className="ml-auto bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium">
+                          {urgentPosts.length}건
+                        </div>
+                      </div>
+                      <div className="space-y-3">
+                        {urgentPosts.map((post) => (
+                          <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                            <div className="bg-gradient-to-r from-red-50 to-pink-50 border border-red-100 p-4 rounded-xl hover:shadow-md hover:from-red-100 hover:to-pink-100 transition-all duration-200 cursor-pointer group">
+                              <div className="flex items-start">
+                                <div className="bg-red-500 rounded-full p-2 mr-3 group-hover:scale-110 transition-transform">
+                                  <span className="text-white text-sm">🚨</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-red-800 text-base mb-1 group-hover:text-red-900 transition-colors">
+                                    [긴급] {post.title}
+                                  </h4>
+                                  <p className="text-sm text-red-600 flex items-center">
+                                    <span className="mr-1">👤</span>
+                                    {post.author.name}
+                                    <span className="mx-2">•</span>
+                                    <span className="mr-1">⏰</span>
+                                    {formatTimeAgo(post.created_at)}
+                                  </p>
+                                </div>
+                                <div className="text-red-400 group-hover:text-red-600 transition-colors">
+                                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </section>
               )}
 
-              {/* All Posts */}
-              <section>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">📝 최신 전체 공지</h3>
-                <div className="bg-white rounded-lg shadow">
-                  {allPosts.length === 0 ? (
-                    <div className="p-4 sm:p-6 text-center text-gray-500 text-sm sm:text-base">
-                      게시된 전체 공지가 없습니다.
+              {/* Posts Grid - Side by Side */}
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-8">
+                {/* All Posts */}
+                <section>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 h-full">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center">
+                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full p-2 mr-3">
+                          <span className="text-white text-xl">📝</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">최신 전체 공지</h3>
+                      </div>
+                      <Link 
+                        href="/posts/all" 
+                        className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 flex items-center"
+                      >
+                        <span className="mr-1">👀</span>
+                        전체
+                      </Link>
                     </div>
-                  ) : (
-                    <div className="divide-y divide-gray-200">
-                      {allPosts.map((post) => (
-                        <Link key={post.id} href={`/posts/${post.id}`} className="block">
-                          <div className="p-3 sm:p-4 hover:bg-gray-50 transition-colors cursor-pointer">
-                            <div className="flex items-start sm:items-center">
-                              <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">📋</span>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
-                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                                  {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
-                                </p>
+                    
+                    {allPosts.length === 0 ? (
+                      <div className="text-center py-8">
+                        <div className="text-4xl mb-3">📭</div>
+                        <p className="text-gray-500">게시된 전체 공지가 없습니다.</p>
+                        <p className="text-gray-400 text-sm mt-1">새로운 공지사항을 기다려주세요.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {allPosts.map((post) => (
+                          <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                            <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 border border-blue-100 p-3 rounded-xl hover:shadow-md hover:from-blue-100/50 hover:to-cyan-100/50 transition-all duration-200 cursor-pointer group">
+                              <div className="flex items-start">
+                                <div className="bg-blue-500 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
+                                  <span className="text-white text-xs">📋</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-blue-900 transition-colors line-clamp-2">
+                                    {post.title}
+                                  </h4>
+                                  <div className="flex items-center text-xs text-gray-600 space-x-3">
+                                    <span className="flex items-center">
+                                      <span className="mr-1">👤</span>
+                                      {post.author.name}
+                                    </span>
+                                    <span className="flex items-center">
+                                      <span className="mr-1">⏰</span>
+                                      {formatTimeAgo(post.created_at)}
+                                    </span>
+                                    <span className="flex items-center">
+                                      <span className="mr-1">👁️</span>
+                                      {post.view_count}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-blue-400 group-hover:text-blue-600 transition-colors">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </section>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </section>
 
-              {/* Department Posts */}
-              <section>
-                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">🏢 최신 부서별 공지</h3>
-                <div className="bg-white rounded-lg shadow">
-                  {departmentPosts.length === 0 ? (
-                    <div className="p-4 sm:p-6 text-center text-gray-500 text-sm sm:text-base">
-                      게시된 부서별 공지가 없습니다.
+                {/* Department Posts */}
+                <section>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 h-full">
+                    <div className="flex items-center justify-between mb-6">
+                      <div className="flex items-center">
+                        <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-2 mr-3">
+                          <span className="text-white text-xl">🏢</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900">최신 부서별 공지</h3>
+                      </div>
+                      <Link 
+                        href="/posts/department" 
+                        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center"
+                      >
+                        <span className="mr-1">👀</span>
+                        전체
+                      </Link>
                     </div>
-                  ) : (
-                    <div className="divide-y divide-gray-200">
-                      {departmentPosts.map((post) => (
-                        <Link key={post.id} href={`/posts/${post.id}`} className="block">
-                          <div className="p-3 sm:p-4 hover:bg-gray-50 transition-colors cursor-pointer">
-                            <div className="flex items-start sm:items-center">
-                              <span className="text-base sm:text-lg mr-2 sm:mr-3 flex-shrink-0">💊</span>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-medium text-gray-900 text-sm sm:text-base break-words">{post.title}</h4>
-                                <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                                  {post.author.name} • {formatTimeAgo(post.created_at)} • 조회 {post.view_count}
-                                </p>
+                    
+                    {departmentPosts.length === 0 ? (
+                      <div className="text-center py-8">
+                        <div className="text-4xl mb-3">🏢</div>
+                        <p className="text-gray-500">게시된 부서별 공지가 없습니다.</p>
+                        <p className="text-gray-400 text-sm mt-1">부서에서 새로운 공지사항을 기다려주세요.</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {departmentPosts.map((post) => (
+                          <Link key={post.id} href={`/posts/${post.id}`} className="block">
+                            <div className="bg-gradient-to-r from-purple-50/50 to-pink-50/50 border border-purple-100 p-3 rounded-xl hover:shadow-md hover:from-purple-100/50 hover:to-pink-100/50 transition-all duration-200 cursor-pointer group">
+                              <div className="flex items-start">
+                                <div className="bg-purple-500 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
+                                  <span className="text-white text-xs">💼</span>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-purple-900 transition-colors line-clamp-2">
+                                    {post.title}
+                                  </h4>
+                                  <div className="flex items-center text-xs text-gray-600 space-x-3">
+                                    <span className="flex items-center">
+                                      <span className="mr-1">👤</span>
+                                      {post.author.name}
+                                    </span>
+                                    <span className="flex items-center">
+                                      <span className="mr-1">⏰</span>
+                                      {formatTimeAgo(post.created_at)}
+                                    </span>
+                                    <span className="flex items-center">
+                                      <span className="mr-1">👁️</span>
+                                      {post.view_count}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div className="text-purple-400 group-hover:text-purple-600 transition-colors">
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </section>
+              </div>
+
+              {/* Calendar Section */}
+              <section>
+                <Calendar />
               </section>
             </div>
           </main>

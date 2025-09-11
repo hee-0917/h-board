@@ -55,6 +55,28 @@ export default function PostDetailPage() {
   const [isIncrementingView, setIsIncrementingView] = useState(false)
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [departmentName, setDepartmentName] = useState<string>('')
+
+  // 부서 이름 가져오기
+  useEffect(() => {
+    const fetchDepartmentName = async () => {
+      if (!employee?.department_id) return
+      
+      try {
+        const response = await fetch('/api/departments')
+        const departments = await response.json()
+        const currentDepartment = departments.find((dept: { id: number; name: string }) => dept.id === employee.department_id)
+        
+        if (currentDepartment) {
+          setDepartmentName(currentDepartment.name)
+        }
+      } catch (error) {
+        console.error('부서 정보 조회 오류:', error)
+      }
+    }
+
+    fetchDepartmentName()
+  }, [employee?.department_id])
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -504,8 +526,8 @@ export default function PostDetailPage() {
             <div className="flex items-center space-x-4">
               <div className="text-sm text-gray-700">
                 <span className="font-medium">{employee?.name}</span>
-                {employee?.department_id && (
-                  <span className="ml-2 text-gray-500">| {employee.department_id}</span>
+                {departmentName && (
+                  <span className="ml-2 text-gray-500">| {departmentName}</span>
                 )}
               </div>
               <button className="relative p-1">

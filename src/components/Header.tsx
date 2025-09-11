@@ -127,7 +127,7 @@ export default function Header({ showAdminMode = false }: HeaderProps) {
             )}
 
             {/* 알림 */}
-            {!showAdminMode && (
+            {(!showAdminMode || !isAdminMode) && (
               <Link href="/notifications" className="relative p-1">
                 <span className="text-2xl">🔔</span>
                 {unreadCount > 0 && (

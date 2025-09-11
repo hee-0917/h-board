@@ -142,6 +142,32 @@ export default function Sidebar({ currentPath }: SidebarProps) {
               알림
             </Link>
           </li>
+          <li>
+            <Link 
+              href="/calendar" 
+              className={`flex items-center p-2 rounded ${
+                currentPath === '/calendar' 
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <span className="mr-3">📅</span>
+              캘린더
+            </Link>
+          </li>
+          <li>
+            <Link 
+              href="/schedule-management" 
+              className={`flex items-center p-2 rounded ${
+                currentPath === '/schedule-management' 
+                  ? 'text-blue-600 bg-blue-50' 
+                  : 'text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <span className="mr-3">📊</span>
+              일정 관리
+            </Link>
+          </li>
           
           {/* 관리자 메뉴 */}
           {isAdmin && (
