@@ -60,7 +60,7 @@ export default function DashboardPage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   useEffect(() => {
     const fetchPosts = async () => {

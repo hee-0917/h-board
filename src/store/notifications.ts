@@ -39,6 +39,7 @@ export const useNotificationsStore = create<NotificationsStore>((set, get) => ({
 
   setNotifications: (notifications) => {
     const unreadCount = notifications.filter(n => !n.is_read).length
+    console.log('🔔 setNotifications 호출됨 - 알림 개수:', notifications.length, '미읽음:', unreadCount)
     set({ notifications, unreadCount })
   },
 

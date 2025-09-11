@@ -65,7 +65,7 @@ export default function AddEmployeePage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   // 이메일 자동 생성
   useEffect(() => {

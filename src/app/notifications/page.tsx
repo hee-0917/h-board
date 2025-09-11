@@ -25,7 +25,7 @@ export default function NotificationsPage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   const handleMarkAsRead = async (notificationId: number) => {
     try {

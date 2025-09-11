@@ -42,7 +42,7 @@ export default function Header({ showAdminMode = false }: HeaderProps) {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   const handleLogout = () => {
     setUser(null)

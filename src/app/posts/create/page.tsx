@@ -74,7 +74,7 @@ export default function CreatePostPage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value, type } = e.target

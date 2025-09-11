@@ -42,7 +42,7 @@ export default function AllPostsPage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   // 부서 이름 가져오기
   useEffect(() => {

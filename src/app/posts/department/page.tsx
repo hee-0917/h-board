@@ -51,7 +51,7 @@ export default function DepartmentPostsPage() {
     if (employee?.id) {
       fetchNotifications(employee.id)
     }
-  }, [employee?.id, fetchNotifications])
+  }, [employee?.id])
 
   useEffect(() => {
     const fetchPosts = async () => {
