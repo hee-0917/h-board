@@ -4,13 +4,8 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 
-// Service Role Key로 인증 우회
-const supabase = createClient(supabaseUrl, supabaseServiceKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false
-  }
-})
+// 이전 버전 방식으로 클라이언트 생성
+const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 // 캘린더 이벤트 조회
 export async function GET(request: NextRequest) {
