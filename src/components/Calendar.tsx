@@ -255,6 +255,39 @@ export default function Calendar({ className = '' }: CalendarProps) {
     }
   }
 
+  const handleExcelDownload = async () => {
+    if (!employee || !employee.department_id) return
+
+    try {
+      const params = new URLSearchParams({
+        department_id: employee.department_id.toString(),
+        year: year.toString(),
+        month: (month + 1).toString()
+      })
+
+      const response = await fetch(`/api/calendar/export?${params}`)
+      
+      if (response.ok) {
+        const blob = await response.blob()
+        const url = window.URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `vacation_report_${year}_${String(month + 1).padStart(2, '0')}.xlsx`
+        document.body.appendChild(a)
+        a.click()
+        window.URL.revokeObjectURL(url)
+        document.body.removeChild(a)
+        console.log('✅ 엑셀 다운로드 성공')
+      } else {
+        console.error('엑셀 다운로드 실패:', response.statusText)
+        alert('엑셀 다운로드에 실패했습니다.')
+      }
+    } catch (error) {
+      console.error('엑셀 다운로드 오류:', error)
+      alert('엑셀 다운로드 중 오류가 발생했습니다.')
+    }
+  }
+
   const monthNames = [
     '1월', '2월', '3월', '4월', '5월', '6월',
     '7월', '8월', '9월', '10월', '11월', '12월'
@@ -291,6 +324,16 @@ export default function Calendar({ className = '' }: CalendarProps) {
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
+          </button>
+          <button
+            onClick={handleExcelDownload}
+            className="ml-4 px-3 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
+            title="휴가현황 엑셀 다운로드"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="text-sm">엑셀</span>
           </button>
         </div>
       </div>
