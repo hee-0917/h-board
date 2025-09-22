@@ -42,15 +42,26 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   login: async (employee_id: string, password: string) => {
     set({ isLoading: true })
     try {
-      const employee = await employeeApi.login(employee_id, password)
-      if (employee) {
-        set({ 
-          employee, 
+      // API 엔드포인트를 통한 로그인
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employee_id, password })
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        set({
+          employee: data.employee,
           user: null, // Supabase Auth 사용하지 않으므로 null
-          isLoading: false 
+          isLoading: false
         })
         return true
       } else {
+        console.error('로그인 실패:', data.error)
         set({ isLoading: false })
         return false
       }
