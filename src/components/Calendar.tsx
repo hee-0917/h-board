@@ -93,9 +93,9 @@ export default function Calendar({ className = '' }: CalendarProps) {
 
   const getEventTypeIcon = (type: CalendarEvent['type']) => {
     switch (type) {
-      case 'annual_leave': return '🏖️'
-      case 'half_day': return '🌅'
-      case 'quarter_day': return '⏰'
+      case 'annual_leave': return 'Y'
+      case 'half_day': return 'Y/2'
+      case 'quarter_day': return '1/4'
       case 'training': return '📚'
       case 'other': return '📝'
       default: return '📅'
@@ -300,10 +300,12 @@ export default function Calendar({ className = '' }: CalendarProps) {
       {/* Calendar Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
-          <div className="bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full p-2 mr-3">
-            <span className="text-white text-xl">📅</span>
+          <div className="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-full p-2 mr-3">
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
           </div>
-          <h3 className="text-xl font-bold text-gray-900">부서 스케줄</h3>
+          <h3 className="text-xl font-bold text-sky-900">부서 일정 관리</h3>
         </div>
         <div className="flex items-center space-x-2">
           <button
@@ -397,15 +399,15 @@ export default function Calendar({ className = '' }: CalendarProps) {
       {/* Legend */}
       <div className="flex flex-wrap gap-2 text-xs">
         <div className="flex items-center">
-          <span className="mr-1">🏖️</span>
+          <span className="mr-1">Y</span>
           <span className="text-gray-600">연차</span>
         </div>
         <div className="flex items-center">
-          <span className="mr-1">🌅</span>
+          <span className="mr-1">Y/2</span>
           <span className="text-gray-600">반차</span>
         </div>
         <div className="flex items-center">
-          <span className="mr-1">⏰</span>
+          <span className="mr-1">1/4</span>
           <span className="text-gray-600">1/4차</span>
         </div>
         <div className="flex items-center">
@@ -459,9 +461,9 @@ export default function Calendar({ className = '' }: CalendarProps) {
                   onChange={(e) => setNewEvent({ ...newEvent, type: e.target.value as CalendarEvent['type'] })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="annual_leave">🏖️ 연차</option>
-                  <option value="half_day">🌅 반차</option>
-                  <option value="quarter_day">⏰ 1/4차</option>
+                  <option value="annual_leave">Y 연차</option>
+                  <option value="half_day">Y/2 반차</option>
+                  <option value="quarter_day">1/4 1/4차</option>
                   <option value="training">📚 교육</option>
                   <option value="other">📝 기타</option>
                 </select>

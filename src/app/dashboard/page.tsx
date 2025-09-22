@@ -133,8 +133,11 @@ export default function DashboardPage() {
             <div className="space-y-6 sm:space-y-8">
               {/* Dashboard Header */}
               <div className="text-center lg:text-left">
-                <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-                  📊 대시보드
+                <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-sky-600 to-indigo-700 bg-clip-text text-transparent mb-2">
+                  <svg className="inline-block w-10 h-10 mr-3 text-sky-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  대시보드
                 </h2>
                 <p className="text-gray-600 text-lg">
                   병원 운영의 모든 정보를 한눈에 확인하세요
@@ -197,16 +200,21 @@ export default function DashboardPage() {
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 h-full">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center">
-                        <div className="bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full p-2 mr-3">
-                          <span className="text-white text-xl">📝</span>
+                        <div className="bg-gradient-to-r from-sky-500 to-indigo-600 rounded-full p-2 mr-3">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
+                          </svg>
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">최신 전체 공지</h3>
                       </div>
                       <Link 
                         href="/posts/all" 
-                        className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-blue-600 hover:to-cyan-600 transition-all duration-200 flex items-center"
+                        className="bg-gradient-to-r from-sky-500 to-indigo-600 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-sky-600 hover:to-indigo-700 transition-all duration-200 flex items-center shadow-sm"
                       >
-                        <span className="mr-1">👀</span>
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
                         전체
                       </Link>
                     </div>
@@ -221,13 +229,15 @@ export default function DashboardPage() {
                       <div className="space-y-3">
                         {allPosts.map((post) => (
                           <Link key={post.id} href={`/posts/${post.id}`} className="block">
-                            <div className="bg-gradient-to-r from-blue-50/50 to-cyan-50/50 border border-blue-100 p-3 rounded-xl hover:shadow-md hover:from-blue-100/50 hover:to-cyan-100/50 transition-all duration-200 cursor-pointer group">
+                            <div className="bg-gradient-to-r from-sky-50/50 to-indigo-50/50 border border-sky-200 p-3 rounded-xl hover:shadow-md hover:from-sky-100/50 hover:to-indigo-100/50 transition-all duration-200 cursor-pointer group">
                               <div className="flex items-start">
-                                <div className="bg-blue-500 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
-                                  <span className="text-white text-xs">📋</span>
+                                <div className="bg-sky-500 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
+                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                  </svg>
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-blue-900 transition-colors line-clamp-2">
+                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-sky-900 transition-colors line-clamp-2">
                                     {post.title}
                                   </h4>
                                   <div className="flex items-center text-xs text-gray-600 space-x-3">
@@ -245,7 +255,7 @@ export default function DashboardPage() {
                                     </span>
                                   </div>
                                 </div>
-                                <div className="text-blue-400 group-hover:text-blue-600 transition-colors">
+                                <div className="text-sky-400 group-hover:text-sky-600 transition-colors">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>
@@ -264,16 +274,21 @@ export default function DashboardPage() {
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 h-full">
                     <div className="flex items-center justify-between mb-6">
                       <div className="flex items-center">
-                        <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-2 mr-3">
-                          <span className="text-white text-xl">🏢</span>
+                        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-full p-2 mr-3">
+                          <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                          </svg>
                         </div>
                         <h3 className="text-xl font-bold text-gray-900">최신 부서별 공지</h3>
                       </div>
                       <Link 
                         href="/posts/department" 
-                        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-purple-600 hover:to-pink-600 transition-all duration-200 flex items-center"
+                        className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-1.5 rounded-full text-xs font-medium hover:from-emerald-700 hover:to-teal-700 transition-all duration-200 flex items-center shadow-sm"
                       >
-                        <span className="mr-1">👀</span>
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
                         전체
                       </Link>
                     </div>
@@ -288,13 +303,15 @@ export default function DashboardPage() {
                       <div className="space-y-3">
                         {departmentPosts.map((post) => (
                           <Link key={post.id} href={`/posts/${post.id}`} className="block">
-                            <div className="bg-gradient-to-r from-purple-50/50 to-pink-50/50 border border-purple-100 p-3 rounded-xl hover:shadow-md hover:from-purple-100/50 hover:to-pink-100/50 transition-all duration-200 cursor-pointer group">
+                            <div className="bg-gradient-to-r from-emerald-50/50 to-teal-50/50 border border-emerald-200 p-3 rounded-xl hover:shadow-md hover:from-emerald-100/50 hover:to-teal-100/50 transition-all duration-200 cursor-pointer group">
                               <div className="flex items-start">
-                                <div className="bg-purple-500 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
-                                  <span className="text-white text-xs">💼</span>
+                                <div className="bg-emerald-600 rounded-full p-1.5 mr-3 group-hover:scale-110 transition-transform">
+                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6" />
+                                  </svg>
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-purple-900 transition-colors line-clamp-2">
+                                  <h4 className="font-semibold text-gray-900 text-sm mb-1 group-hover:text-emerald-900 transition-colors line-clamp-2">
                                     {post.title}
                                   </h4>
                                   <div className="flex items-center text-xs text-gray-600 space-x-3">
@@ -312,7 +329,7 @@ export default function DashboardPage() {
                                     </span>
                                   </div>
                                 </div>
-                                <div className="text-purple-400 group-hover:text-purple-600 transition-colors">
+                                <div className="text-emerald-400 group-hover:text-emerald-600 transition-colors">
                                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                   </svg>

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import * as ExcelJS from 'exceljs'
 
+export const dynamic = 'force-dynamic'
+
 // 캘린더 엑셀 다운로드 전용 API
 export async function GET(request: NextRequest) {
   try {
